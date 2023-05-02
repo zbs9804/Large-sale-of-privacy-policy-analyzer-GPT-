@@ -114,7 +114,7 @@ func count(client *openai.Client) { //analyze results
 
 	//count each files
 	for i := 0; i <= 19; i++ {
-		content := tools.ReadWholeFile("Goutput" + fmt.Sprintf("%d", i) + ".txt")
+		content := tools.ReadWholeFile("output" + fmt.Sprintf("%d", i) + ".txt")
 		tools.CountNumbers(counts, client, content)
 		fmt.Printf("counts[0] = %d, counts[1] =  %d, counts[2] = %d,"+
 			"counts[3] = %d, counts[4] = %d, counts[5] = %d, counts[6] = %d, "+
