@@ -19,94 +19,94 @@ func main() {
 	// 0.002USD / 1k tokens
 
 	/*call this to tally initial results, also need to comment all lines of main func below*/
-	count(client)
+	//count(client)
 
 	/*this part gives initial results*/
-	// file, err := os.Open("pp_google play.txt") //open file, presumably contains 1000 lines
-	// if err != nil {
-	// 	fmt.Println("error opening file", err)
-	// 	return
-	// }
+	file, err := os.Open("pp_google play.txt") //open file, presumably contains 1000 lines
+	if err != nil {
+		fmt.Println("error opening file", err)
+		return
+	}
 
-	// defer file.Close()
+	defer file.Close()
 
-	// fiftyLines := make([]string, 10) //let gpt analyze 5 lines each time, this is an array
+	fiftyLines := make([]string, 10) //let gpt analyze 5 lines each time, this is an array
 
-	// scanner := bufio.NewScanner(file)
+	scanner := bufio.NewScanner(file)
 
-	// for batch := 0; batch < 20; batch++ {
+	for batch := 0; batch < 20; batch++ {
 
-	// 	fiftyLines = make([]string, 10) //re-initialize array
+		fiftyLines = make([]string, 10) //re-initialize array
 
-	// 	for i := 0; i < 5 && scanner.Scan(); i++ { //read file 5 URLs each time
-	// 		URL := scanner.Text()
-	// 		fiftyLines = append(fiftyLines, URL)
-	// 		fmt.Println(URL)
-	// 	}
+		for i := 0; i < 5 && scanner.Scan(); i++ { //read file 5 URLs each time
+			URL := scanner.Text()
+			fiftyLines = append(fiftyLines, URL)
+			fmt.Println(URL)
+		}
 
-	// 	inOneLine := strings.Join(fiftyLines, "\n") //5 lines in one string
+		inOneLine := strings.Join(fiftyLines, "\n") //5 lines in one string
 
-	// 	//make a request
-	// 	resp, err := client.CreateChatCompletion(
-	// 		context.Background(),
-	// 		openai.ChatCompletionRequest{
-	// 			Model: openai.GPT3Dot5Turbo,
-	// 			Messages: []openai.ChatCompletionMessage{
-	// 				{
-	// 					Role: openai.ChatMessageRoleUser,
+		//make a request
+		resp, err := client.CreateChatCompletion(
+			context.Background(),
+			openai.ChatCompletionRequest{
+				Model: openai.GPT3Dot5Turbo,
+				Messages: []openai.ChatCompletionMessage{
+					{
+						Role: openai.ChatMessageRoleUser,
 
-	// 					/*HIPPA √ */
-	// 					// Content: "please summarize privacy policies of 5 apps here: " + inOneLine +
-	// 					// 	"\ntell me how many of them violates any HIPPA clauses?",
+						/*HIPPA √ */
+						// Content: "please summarize privacy policies of 5 apps here: " + inOneLine +
+						// 	"\ntell me how many of them violates any HIPPA clauses?",
 
-	// 					/*how many √ */
-	// 					// Content: "please summarize privacy policies of 5 apps here: " + inOneLine +
-	// 					// 	"\ntell me how many of them mentioned sharing users' data with third parties?",
+						/*how many √ */
+						// Content: "please summarize privacy policies of 5 apps here: " + inOneLine +
+						// 	"\ntell me how many of them mentioned sharing users' data with third parties?",
 
-	// 					/*sharing with third parties, for what √ */
-	// 					Content: "please summarize privacy policies of 5 apps here: " + inOneLine +
-	// 						"\nif any of them claims sharing user data with third parties, " +
-	// 						"please summarize the purpose of doing so, and what kind of third parties" +
-	// 						"they are sending to",
+						/*sharing with third parties, for what √ */
+						Content: "please summarize privacy policies of 5 apps here: " + inOneLine +
+							"\nif any of them claims sharing user data with third parties, " +
+							"please summarize the purpose of doing so, and what kind of third parties" +
+							"they are sending to",
 
-	// 					/*how long √ */
-	// 					// Content: `please summarize privacy policies of 5 apps here: ` + inOneLine +
-	// 					// 	`If it mentions the collection of user data, ` +
-	// 					// 	`how long will they retain the data?`,
+						/*how long √ */
+						// Content: `please summarize privacy policies of 5 apps here: ` + inOneLine +
+						// 	`If it mentions the collection of user data, ` +
+						// 	`how long will they retain the data?`,
 
-	// 					/*when to collect what kind of data √ */
-	// 					// Content: `please summarize privacy policies of several apps here: ` + inOneLine +
-	// 					// 	`If it mentions the collection of user data, ` +
-	// 					// 	`under what circumstances will they do so, ` +
-	// 					// 	`and what types of data will be collected?`,
-	// 					/*high refuse rate: when collect*/
-	// 					// Content: `summarize privacy policies here: ` + inOneLine +
-	// 					// 	`If it mentions the collection of user data, ` +
-	// 					// 	`under what circumstances will data collection be triggered ` +
-	// 					// 	`and what types of data will be collected?`,
-	// 					/*refuse to respond: when collect*/
-	// 					// `according to privacy policies here: ` + inOneLine +
-	// 					// `If it mentions the collection of user data, ` +
-	// 					// `under what circumstances will data collection be triggered ` +
-	// 					// `and what types of data will be collected?`,
+						/*when to collect what kind of data √ */
+						// Content: `please summarize privacy policies of several apps here: ` + inOneLine +
+						// 	`If it mentions the collection of user data, ` +
+						// 	`under what circumstances will they do so, ` +
+						// 	`and what types of data will be collected?`,
+						/*high refuse rate: when collect*/
+						// Content: `summarize privacy policies here: ` + inOneLine +
+						// 	`If it mentions the collection of user data, ` +
+						// 	`under what circumstances will data collection be triggered ` +
+						// 	`and what types of data will be collected?`,
+						/*refuse to respond: when collect*/
+						// `according to privacy policies here: ` + inOneLine +
+						// `If it mentions the collection of user data, ` +
+						// `under what circumstances will data collection be triggered ` +
+						// `and what types of data will be collected?`,
 
-	// 				},
-	// 			},
-	// 		},
-	// 	)
-	// 	if err != nil {
-	// 		fmt.Printf("error occured in %d iterations", batch)
-	// 		panic(err)
-	// 	}
+					},
+				},
+			},
+		)
+		if err != nil {
+			fmt.Printf("error occured in %d iterations", batch)
+			panic(err)
+		}
 
-	// 	fmt.Println(resp.Choices[0].Message.Content)
+		fmt.Println(resp.Choices[0].Message.Content)
 
-	// 	tools.WriteFile(`output`+fmt.Sprintf("%d", batch)+".txt",
-	// 		resp.Choices[0].Message.Content, batch)
+		tools.WriteFile(`output`+fmt.Sprintf("%d", batch)+".txt",
+			resp.Choices[0].Message.Content, batch)
 
-	// 	fmt.Println("waiting...")
-	// 	time.Sleep(time.Second * 20)
-	// }
+		fmt.Println("waiting...")
+		time.Sleep(time.Second * 20)
+	}
 }
 
 func count(client *openai.Client) { //analyze results
