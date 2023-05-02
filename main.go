@@ -18,8 +18,6 @@ func main() {
 	client := openai.NewClient("OPENAI'S API KEY")
 	// 0.002USD / 1k tokens
 
-	/*call this to tally initial results, also need to comment all lines of main func below*/
-	//count(client)
 
 	/*this part gives initial results*/
 	file, err := os.Open("pp_google play.txt") //open file, presumably contains 1000 lines
@@ -107,6 +105,8 @@ func main() {
 		fmt.Println("waiting...")
 		time.Sleep(time.Second * 20)
 	}
+	/*call this to tally initial results*/
+	count(client)
 }
 
 func count(client *openai.Client) { //analyze results
